@@ -1,11 +1,30 @@
 name: "Node setup"
 description: "Setup node & npm and install dependencies"
+inputs:
+  cache:
+    description: "Set npm cache: 'always', 'never' or default ('')"
+    required: false
+    default: ""
+  version:
+    description: "Node version"
+    required: false
+    default: ""
+  registry-url:
+    description: "Npm registry URL"
+    required: false
+    default: "https://registry.npmjs.org"
+  install:
+    description: "Run npm ci"
+    required: false
+    default: "true"
 runs:
   using: "composite"
   steps:
+    # Enable caching when 'cache' is set to 'always' or
+    # when the branch is not update-dependencies or dependabot/*
     - name: "Resolve caching"
       id: cache
-      if: ${{ github.ref_name != 'update-dependencies' && !startsWith(github.ref_name, 'dependabot/') }}
+      if: ${{ inputs.cache == 'always' || (inputs.cache == '' && github.ref_name != 'update-dependencies' && !startsWith(github.ref_name, 'dependabot/')) }}
       run: echo "node-cache=npm" >> "$GITHUB_OUTPUT"
       shell: "bash"
 
@@ -13,9 +32,13 @@ runs:
       uses: actions/setup-node@v4.1.0
       with:
         node-version-file: ".nvmrc"
-        registry-url: "https://registry.npmjs.org"
+        # When version is provided, it overrides the value set in .nvmrc
+        # https://github.com/actions/setup-node?tab=readme-ov-file#usage
+        node-version: ${{ inputs.version }}
+        registry-url: ${{ inputs.registry-url }}
         cache: ${{ steps.cache.outputs.node-cache }}
 
     - name: "Install dependencies"
+      if: ${{ inputs.install == 'true' }}
       run: npm ci
       shell: "bash"
