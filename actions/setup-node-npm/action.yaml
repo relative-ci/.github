@@ -1,4 +1,4 @@
-name: "Node setup"
+name: "Setup node & npm"
 description: "Setup node & npm and install dependencies"
 inputs:
   cache:
@@ -38,7 +38,7 @@ runs:
         registry-url: ${{ inputs.registry-url }}
         cache: ${{ steps.cache.outputs.node-cache }}
 
-    - name: "Install dependencies"
+    - name: "Install npm dependencies"
       if: ${{ inputs.install == 'true' }}
       run: npm ci
       shell: "bash"
