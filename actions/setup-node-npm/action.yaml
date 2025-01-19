@@ -17,6 +17,11 @@ inputs:
     description: "Run npm ci"
     required: false
     default: "true"
+outputs:
+  node-cache:
+    description: "Node setup cache"
+    cache: ${{ steps.cache.outputs.node-cache }}
+
 runs:
   using: "composite"
   steps:
@@ -40,5 +45,5 @@ runs:
 
     - name: "Install npm dependencies"
       if: ${{ inputs.install == 'true' }}
-      run: npm ci
+      run: npm ci --no-audit
       shell: "bash"
