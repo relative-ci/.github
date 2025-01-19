@@ -20,7 +20,7 @@ inputs:
 outputs:
   node-cache:
     description: "Node setup cache"
-    cache: ${{ steps.cache.outputs.node-cache }}
+    value: ${{ steps.cache.outputs.node-cache }}
 
 runs:
   using: "composite"
