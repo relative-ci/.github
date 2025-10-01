@@ -45,6 +45,7 @@ runs:
 
     - name: "Delete obsolete always-auth parameter"
       run: npm config delete always-auth
+      shell: "bash"
 
     - name: "Install npm dependencies"
       if: ${{ inputs.install == 'true' }}
