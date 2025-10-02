@@ -42,7 +42,6 @@ runs:
         node-version: ${{ inputs.version }}
         registry-url: ${{ inputs.registry-url }}
         cache: ${{ steps.cache.outputs.node-cache }}
-        always-auth: false
 
     - name: "Install npm dependencies"
       if: ${{ inputs.install == 'true' }}
